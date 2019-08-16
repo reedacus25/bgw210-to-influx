@@ -17,7 +17,7 @@ This script is written in bash, and has the following dependencies
 •curl  
 •wget  
 •findutils  
-Obviously bash isn't the worlds best scripting language,  
+Obviously bash isn't the world's best scripting language,  
 however it provides a lower barrier to entry than a scripting language,  
 and bash is what I was comfortable with when creating this.
 
