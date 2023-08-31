@@ -5,7 +5,10 @@
 #This script is tailored towards VDSL2 installs, not GPON/Fiber or ADSL[2+].
 #I have not tested this script in a single-pair VDSL2 installation, YMMV.
 
-#It has been tested working against the following firmware revisions:
+#At some point, ATT added 2 lines to their RG page, breaking the stats.
+#Considered fixed in 4.23.4
+
+#~~It has been tested working against the following firmware revisions:~~
 #1.10.9
 #1.9.16
 #1.8.18
@@ -57,127 +60,133 @@ post2influx="curl -i -XPOST "http://$influxserver:$influxport/write?db=$influxdb
 #comments for 'variableName - lineNumber'
 
 #VDSL2 Line Sync Rates
-#line1syncDS - 159
-line1syncDS=$(head -n158 $html | tail -n1 | cut -d\> -f2 | cut -d\< -f1 | xargs)
+#line1syncDS - 161
+line1syncDS=$(head -n160 $html | tail -n1 | cut -d\> -f2 | cut -d\< -f1 | xargs)
 $post2influx 'sync_rate,instance=Line1,type_instance=sync_ds value='$line1syncDS
-#line2syncDS - 160
-line2syncDS=$(head -n159 $html | tail -n1 | cut -d\> -f2 | cut -d\< -f1 | xargs)
+#line2syncDS - 162
+line2syncDS=$(head -n161 $html | tail -n1 | cut -d\> -f2 | cut -d\< -f1 | xargs)
 $post2influx 'sync_rate,instance=Line2,type_instance=sync_ds value='$line2syncDS
-#line1syncUS - 163
-line1syncUS=$(head -n162 $html | tail -n1 | cut -d\> -f2 | cut -d\< -f1 | xargs)
+#line1syncUS - 165
+line1syncUS=$(head -n164 $html | tail -n1 | cut -d\> -f2 | cut -d\< -f1 | xargs)
 $post2influx 'sync_rate,instance=Line1,type_instance=sync_us value='$line1syncUS
-#line2syncUS - 164
-line2syncUS=$(head -n163 $html | tail -n1 | cut -d\> -f2 | cut -d\< -f1 | xargs)
+#line2syncUS - 166
+line2syncUS=$(head -n165 $html | tail -n1 | cut -d\> -f2 | cut -d\< -f1 | xargs)
 $post2influx 'sync_rate,instance=Line2,type_instance=sync_us value='$line2syncUS
-#line1maxDS - 167
-line1maxDS=$(head -n166 $html | tail -n1 | cut -d\> -f2 | cut -d\< -f1 | xargs)
+#line1maxDS - 169
+line1maxDS=$(head -n168 $html | tail -n1 | cut -d\> -f2 | cut -d\< -f1 | xargs)
 $post2influx 'sync_rate,instance=Line1,type_instance=max_ds value='$line1maxDS
-#line2maxDS - 168
-line2maxDS=$(head -n167 $html | tail -n1 | cut -d\> -f2 | cut -d\< -f1 | xargs)
+#line2maxDS - 170
+line2maxDS=$(head -n169 $html | tail -n1 | cut -d\> -f2 | cut -d\< -f1 | xargs)
 $post2influx 'sync_rate,instance=Line2,type_instance=max_ds value='$line2maxDS
-#line1maxUS - 171
-line1maxUS=$(head -n170 $html | tail -n1 | cut -d\> -f2 | cut -d\< -f1 | xargs)
+#line1maxUS - 173
+line1maxUS=$(head -n172 $html | tail -n1 | cut -d\> -f2 | cut -d\< -f1 | xargs)
 $post2influx 'sync_rate,instance=Line1,type_instance=max_us value='$line1maxUS
-#line2maxUS - 172
-line2maxUS=$(head -n171 $html | tail -n1 | cut -d\> -f2 | cut -d\< -f1 | xargs)
+#line2maxUS - 174
+line2maxUS=$(head -n173 $html | tail -n1 | cut -d\> -f2 | cut -d\< -f1 | xargs)
 $post2influx 'sync_rate,instance=Line2,type_instance=max_us value='$line2maxUS
-#bothsyncDS - 376
-bothsyncDS=$(head -n375 $html | tail -n1 | cut -d\> -f2 | cut -d\< -f1 | xargs)
+#bothsyncDS - 378
+bothsyncDS=$(head -n377 $html | tail -n1 | cut -d\> -f2 | cut -d\< -f1 | xargs)
 $post2influx 'sync_rate,instance=Both,type_instance=sync_ds value='$bothsyncDS
-#bothsyncUS - 380
-bothsyncUS=$(head -n379 $html | tail -n1 | cut -d\> -f2 | cut -d\< -f1 | xargs)
+#bothsyncUS - 382
+bothsyncUS=$(head -n381 $html | tail -n1 | cut -d\> -f2 | cut -d\< -f1 | xargs)
 $post2influx 'sync_rate,instance=Both,type_instance=sync_us value='$bothsyncUS
 
-#VDSL2 Line SNR values
-#line1snrDS - 190
-line1snrDS=$(head -n189 $html | tail -n1 | xargs)
+#line1snrDS - 192
+line1snrDS=$(head -n191 $html | tail -n1 | xargs)
 $post2influx 'sn_margin,instance=Line1,type_instance=ds value='$line1snrDS
-#line1snrUS - 193
-line1snrUS=$(head -n192 $html | tail -n1 | xargs)
+#line1snrUS - 195
+line1snrUS=$(head -n194 $html | tail -n1 | xargs)
 $post2influx 'sn_margin,instance=Line1,type_instance=us value='$line1snrUS
-#line2snrDS - 196
-line2snrDS=$(head -n195 $html | tail -n1 | xargs)
+#line2snrDS - 198
+line2snrDS=$(head -n197 $html | tail -n1 | xargs)
 $post2influx 'sn_margin,instance=Line2,type_instance=ds value='$line2snrDS
-#line2snrUS - 199
-line2snrUS=$(head -n198 $html | tail -n1 | xargs)
+#line2snrUS - 201
+line2snrUS=$(head -n200 $html | tail -n1 | xargs)
 $post2influx 'sn_margin,instance=Line2,type_instance=us value='$line2snrUS
 
-#VDSL2 Line Attenuation values
-#line1attenDS - 204
-line1attenDS=$(head -n203 $html | tail -n1 | xargs)
+#line1attenDS - 206
+line1attenDS=$(head -n205 $html | tail -n1 | xargs)
 $post2influx 'attenuation,instance=Line1,type_instance=ds value='$line1attenDS
-#line1attenUS - 207
-line1attenUS=$(head -n206 $html | tail -n1 | xargs)
+#line1attenUS - 209
+line1attenUS=$(head -n208 $html | tail -n1 | xargs)
 $post2influx 'attenuation,instance=Line1,type_instance=us value='$line1attenUS
-#line2attenDS - 210
-line2attenDS=$(head -n209 $html | tail -n1 | xargs)
+#line2attenDS - 212
+line2attenDS=$(head -n211 $html | tail -n1 | xargs)
 $post2influx 'attenuation,instance=Line2,type_instance=ds value='$line2attenDS
-#line2attenUS - 213
-line2attenUS=$(head -n212 $html | tail -n1 | xargs)
+#line2attenUS - 215
+line2attenUS=$(head -n214 $html | tail -n1 | xargs)
 $post2influx 'attenuation,instance=Line2,type_instance=us value='$line2attenUS
 
-#VDSL2 Line Upstream/Downstream Power Level values
-#line1powerDS - 218
-line1powerDS=$(head -n217 $html | tail -n1 | cut -d\< -f1 | xargs)
+#line1powerDS - 220
+line1powerDS=$(head -n219 $html | tail -n1 | cut -d\< -f1 | xargs)
 $post2influx 'power_levels,instance=Line1,type_instance=ds value='$line1powerDS
-#line1powerUS - 220
-line1powerUS=$(head -n219 $html | tail -n1 | cut -d\< -f1 | xargs)
+#line1powerUS - 222
+line1powerUS=$(head -n212 $html | tail -n1 | cut -d\< -f1 | xargs)
 $post2influx 'power_levels,instance=Line1,type_instance=us value='$line1powerUS
-#line2powerDS - 222
-line2powerDS=$(head -n221 $html | tail -n1 | cut -d\< -f1 | xargs)
+#line2powerDS - 224
+line2powerDS=$(head -n223 $html | tail -n1 | cut -d\< -f1 | xargs)
 $post2influx 'power_levels,instance=Line2,type_instance=ds value='$line2powerDS
-#line2powerUS - 224
-line2powerUS=$(head -n223 $html | tail -n1 | cut -d\< -f1 | xargs)
+#line2powerUS - 226
+line2powerUS=$(head -n225 $html | tail -n1 | cut -d\< -f1 | xargs)
 $post2influx 'power_levels,instance=Line2,type_instance=us value='$line2powerUS
 
-#VDSL2 Line Forward Error Correction values
-#line1fecDS - 258
-line1fecDS=$(head -n257 $html | tail -n1 | cut -d\< -f1 | xargs)
+#line1fecDS - 260
+line1fecDS=$(head -n259 $html | tail -n1 | cut -d\< -f1 | xargs)
 $post2influx 'errors_total,instance=Line1,type_instance=fec_ds value='$line1fecDS
-#line1fecUS - 260
-line1fecUS=$(head -n259 $html | tail -n1 | cut -d\< -f1 | xargs)
+#line1fecUS - 262
+line1fecUS=$(head -n261 $html | tail -n1 | cut -d\< -f1 | xargs)
 $post2influx 'errors_total,instance=Line1,type_instance=fec_us value='$line1fecUS
-#line2fecDS - 262
-line2fecDS=$(head -n261 $html | tail -n1 | cut -d\< -f1 | xargs)
+#line2fecDS - 264
+line2fecDS=$(head -n263 $html | tail -n1 | cut -d\< -f1 | xargs)
 $post2influx 'errors_total,instance=Line2,type_instance=fec_ds value='$line2fecDS
-#line2fecUS - 264
-line2fecUS=$(head -n263 $html | tail -n1 | cut -d\< -f1 | xargs)
+#line2fecUS - 266
+line2fecUS=$(head -n265 $html | tail -n1 | cut -d\< -f1 | xargs)
 $post2influx 'errors_total,instance=Line2,type_instance=fec_us value='$line2fecUS
 
-#VDSL2 Line CRC Error values
-#line1crcDS - 268
-line1crcDS=$(head -n267 $html | tail -n1 | cut -d\< -f1 | xargs)
+#line1crcDS - 270
+line1crcDS=$(head -n269 $html | tail -n1 | cut -d\< -f1 | xargs)
 $post2influx 'errors_total,instance=Line1,type_instance=crc_ds value='$line1crcDS
-#line1crcUS - 270
-line1crcUS=$(head -n269 $html | tail -n1 | cut -d\< -f1 | xargs)
+#line1crcUS - 272
+line1crcUS=$(head -n271 $html | tail -n1 | cut -d\< -f1 | xargs)
 $post2influx 'errors_total,instance=Line1,type_instance=crc_us value='$line1crcUS
-#line2crcDS - 272
-line2crcDS=$(head -n271 $html | tail -n1 | cut -d\< -f1 | xargs)
+#line2crcDS - 274
+line2crcDS=$(head -n273 $html | tail -n1 | cut -d\< -f1 | xargs)
 $post2influx 'errors_total,instance=Line2,type_instance=crc_ds value='$line2crcDS
-#line2crcUS - 274
-line2crcUS=$(head -n273 $html | tail -n1 | cut -d\< -f1 | xargs)
+#line2crcUS - 276
+line2crcUS=$(head -n275 $html | tail -n1 | cut -d\< -f1 | xargs)
 $post2influx 'errors_total,instance=Line2,type_instance=crc_us value='$line2crcUS
 
-#VDSL2 Line Errored Seconds
-#line1errsec15m - 292
-line1errsec15m=$(head -n291 $html | tail -n1 | cut -d\> -f2 | cut -d\< -f1 | xargs)
+#line1errsec15m - 294
+line1errsec15m=$(head -n293 $html | tail -n1 | cut -d\> -f2 | cut -d\< -f1 | xargs)
 $post2influx 'errors_15m,instance=Line1,type_instance=Errored_Seconds value='$line1errsec15m
-#line2errsec15m - 298
-line2errsec15m=$(head -n297 $html | tail -n1 | cut -d\> -f2 | cut -d\< -f1 | xargs)
+#line2errsec15m - 300
+line2errsec15m=$(head -n299 $html | tail -n1 | cut -d\> -f2 | cut -d\< -f1 | xargs)
 $post2influx 'errors_15m,instance=Line2,type_instance=Errored_Seconds value='$line2errsec15m
-#line1errsecsev15m - 305
-line1errsecsev15m=$(head -n304 $html | tail -n1 | cut -d\> -f2 | cut -d\< -f1 | xargs)
+#line1errsecsev15m - 307
+line1errsecsev15m=$(head -n306 $html | tail -n1 | cut -d\> -f2 | cut -d\< -f1 | xargs)
 $post2influx 'errors_15m,instance=Line1,type_instance=Severely_Errored_Seconds value='$line1errsecsev15m
-#line2errsecsev15m - 311
-line2errsecsev15m=$(head -n310 $html | tail -n1 | cut -d\> -f2 | cut -d\< -f1 | xargs)
+#line2errsecsev15m - 313
+line2errsecsev15m=$(head -n312 $html | tail -n1 | cut -d\> -f2 | cut -d\< -f1 | xargs)
 $post2influx 'errors_15m,instance=Line2,type_instance=Severely_Errored_Seconds value='$line2errsecsev15m
-#line1unavail15m - 318
-line1unavail15m=$(head -n317 $html | tail -n1 | cut -d\> -f2 | cut -d\< -f1 | xargs)
+#line1unavail15m - 320
+line1unavail15m=$(head -n319 $html | tail -n1 | cut -d\> -f2 | cut -d\< -f1 | xargs)
 $post2influx 'errors_15m,instance=Line1,type_instance=Unavailable_Seconds value='$line1unavail15m
-#line2unavail15m - 324
-line2unavail15m=$(head -n323 $html | tail -n1 | cut -d\> -f2 | cut -d\< -f1 | xargs)
+#line2unavail15m - 326
+line2unavail15m=$(head -n325 $html | tail -n1 | cut -d\> -f2 | cut -d\< -f1 | xargs)
 $post2influx 'errors_15m,instance=Line2,type_instance=Unavailable_Seconds value='$line2unavail15m
 
+#line1fec15m - 333
+line1fec15m=$(head -n332 $html | tail -n1 | cut -d\> -f2 | cut -d\< -f1 | xargs)
+$post2influx 'errors_15m,instance=Line1,type_instance=FEC value='$line1fec15m
+#line2fec15m - 339
+line2fec15m=$(head -n338 $html | tail -n1 | cut -d\> -f2 | cut -d\< -f1 | xargs)
+$post2influx 'errors_15m,instance=Line2,type_instance=FEC value='$line2fec15m
+#line1crc15m - 346
+line1crc15m=$(head -n345 $html | tail -n1 | cut -d\> -f2 | cut -d\< -f1 | xargs)
+$post2influx 'errors_15m,instance=Line1,type_instance=CRC value='$line1crc15m
+#line2crc15m - 352
+line2crc15m=$(head -n351 $html | tail -n1 | cut -d\> -f2 | cut -d\< -f1 | xargs)
+$post2influx 'errors_15m,instance=Line2,type_instance=CRC value='$line2crc15m
 
 #cleanup the statsfile
 rm $html
